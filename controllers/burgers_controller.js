@@ -1,20 +1,24 @@
 var express = require("express");
 //copied from catsController.js 
 var router = express.Router();
+var Sequelize = require('sequelize');
 
 // Import the model (burger.js) 2 use its database fn.s
-var burger = require("../models/burger.js");
+var db = require("../models");
+console.log(burger);
 
 // CC de catsController.js
 // Create all our routes + set up logic w/n 
 // those routes where required.
 router.get("/", function(req, res) {
-    burger.all(function(data) {
+    db.burger.findAll({}).then(function(data) {
         var hbsObject = {
             burgers: data
         };
-        console.log(hbsObject);
-        res.render("index", hbsObject);
+        console.log("hbsObject:", hbsObject);
+        // res.render("index", hbsObject);
+        // res.json(data);
+
     });
 });
 
@@ -24,6 +28,9 @@ router.post("/", function(req, res) {
     // req.body--data from app 2 server
     console.log("this is the req.body", req.body);
     // burger w/ all these methods; create a property
+
+    // seq updates here..
+    // ORM stuff
     burger.create([
         // sql col name
         "burger_name", "devoured"
